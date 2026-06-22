@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
+  <title>Технологии вокруг нас · 5 класс · Старинная книга</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #3e2f24;
+      background-image: radial-gradient(circle at 20% 30%, #5d4430 2%, transparent 3%),
+                        radial-gradient(circle at 80% 60%, #4a3622 4%, transparent 5%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Georgia', 'Times New Roman', 'Book Antiqua', 'Palatino', serif;
+      padding: 25px;
+      margin: 0;
+    }
+
+    /* книга */
+    .book {
+      background: #faf3e0;
+      background-image: linear-gradient(180deg, #f7efd6 0%, #f3e6c4 100%);
+      border: 8px solid #6b4f32;
+      border-radius: 18px 28px 28px 18px;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.7), inset 0 0 40px rgba(160, 120, 70, 0.5);
+      max-width: 1050px;
+      width: 100%;
+      padding: 30px 30px 25px;
+      position: relative;
+      transition: all 0.2s;
+      color: #2e2416;
+    }
+
+    /* корешок слева */
+    .book::before {
+      content: "";
+      position: absolute;
+      left: -16px;
+      top: 4%;
+      height: 92%;
+      width: 18px;
+      background: linear-gradient(90deg, #4d3420, #795b3c, #4d3420);
+      border-radius: 12px 0 0 12px;
+      box-shadow: inset -2px 0 6px rgba(0,0,0,0.5);
+    }
+
+    .book-title {
+      font-size: 2.8rem;
+      text-align: center;
+      font-weight: bold;
+      color: #3d2b18;
+      text-shadow: 2px 2px 0 rgba(200, 170, 110, 0.5);
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+      font-family: 'Book Antiqua', 'Georgia', serif;
+      border-bottom: 3px double #b39264;
+      display: inline-block;
+      padding-bottom: 4px;
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .sub-header {
+      text-align: center;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #5e4329;
+      margin: 10px 0 20px;
+      letter-spacing: 0.8px;
+    }
+
+    /* панель вариантов над текстом */
+    .word-bank {
+      background: #e7d7b8;
+      border: 3px solid #aa8b65;
+      border-radius: 30px;
+      padding: 18px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      box-shadow: inset 0 0 18px rgba(100, 70, 25, 0.5), 0 6px 10px rgba(0,0,0,0.3);
+      background: #efe0c6;
+    }
+
+    .word-chip {
+      background: #fef7e9;
+      border: 2px solid #7b623f;
+      color: #2f2413;
+      font-family: 'Georgia', 'Book Antiqua', serif;
+      font-size: 1.4rem;
+      font-weight: bold;
+      padding: 8px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #5b4023;
+      transition: 0.1s ease;
+      background: #fffaf0;
+      letter-spacing: 0.3px;
+    }
+
+    .word-chip:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #5b4023;
+    }
+
+    .word-chip.used-correct {
+      opacity: 0.8;
+      background: #d4e2c4;
+      border-color: #3f6123;
+      color: #1e3b08;
+      text-decoration: line-through;
+      text-decoration-color: #527a34;
+      pointer-events: none;
+      box-shadow: 0 2px 0 #2f4a1a;
+    }
+
+    /* счёт и прогресс */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #dacbad;
+      border-radius: 40px;
+      padding: 8px 22px;
+      margin-bottom: 25px;
+      border: 2px solid #957b58;
+      font-weight: bold;
+      font-size: 1.6rem;
+      color: #2f2414;
+    }
+
+    .progress-bar {
+      width: 190px;
+      height: 14px;
+      background: #cbb28b;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid #624c32;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: #718c4f;
+      background: linear-gradient(90deg, #9bb87f, #5b783a);
+      box-shadow: 0 0 8px #cbda9e;
+      transition: width 0.25s;
+    }
+
+    .reset-btn {
+      background: #c5aa7a;
+      border: none;
+      font-family: 'Georgia', serif;
+      font-size: 1.4rem;
+      padding: 6px 22px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #2f1f0e;
+      box-shadow: 0 3px 0 #6b4f32;
+      border: 1px solid #a08154;
+      transition: 0.1s;
+    }
+
+    .reset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #6b4f32;
+    }
+
+    /* текст с пропусками */
+    .text-page {
+      background: #fef9ed;
+      padding: 25px 28px;
+      border-radius: 24px;
+      border: 2px solid #bb9f78;
+      box-shadow: inset 0 0 20px rgba(160, 120, 60, 0.4);
+      font-size: 1.7rem;
+      line-height: 2;
+      color: #32281c;
+      margin: 15px 0 10px;
+      font-family: 'Book Antiqua', 'Georgia', serif;
+    }
+
+    .gap {
+      display: inline-block;
+      min-width: 145px;
+      background: #f3e5cc;
+      border-bottom: 3px dashed #7a623f;
+      padding: 0 8px;
+      margin: 0 6px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #4a3923;
+      text-align: center;
+      border-radius: 6px;
+      transition: 0.15s;
+      background: #faf0db;
+    }
+
+    .gap:hover {
+      background: #ecd59c;
+      border-bottom: 3px solid #5d4324;
+    }
+
+    .gap.filled {
+      border-bottom-style: solid;
+      background: #e7d7b5;
+    }
+
+    .gap.correct-flash {
+      background: #b1d18b;
+      color: #1e3f07;
+      box-shadow: 0 0 28px #b7e086;
+      border-bottom: 3px solid #2e5c0a;
+    }
+
+    .gap.wrong-flash {
+      background: #e4a590;
+      color: #541e0a;
+      box-shadow: 0 0 24px #f28b6b;
+      border-bottom: 3px solid #a1300f;
+    }
+
+    .final-message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #3a5622;
+      text-shadow: 1px 1px 0 white;
+    }
+
+    @media (max-width: 700px) {
+      .book {
+        padding: 20px;
+      }
+      .text-page {
+        font-size: 1.4rem;
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="book">
+  <div style="text-align: center;">
+    <span class="book-title">📖 Технологии вокруг нас</span>
+  </div>
+  <div class="sub-header">Труд (технология) · 5 класс</div>
+
+  <!-- Банк слов над текстом -->
+  <div class="word-bank" id="wordBankContainer"></div>
+
+  <!-- Статистика -->
+  <div class="stats-row">
+    <span>✨ Верно: <span id="scoreDisplay">0</span> / 10</span>
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill" style="width:0%"></div>
+    </div>
+    <button class="reset-btn" id="resetButton">🕮 Начать заново</button>
+  </div>
+
+  <!-- Текст с пропусками -->
+  <div id="textContainer" class="text-page"></div>
+  <div id="finalMessage" class="final-message"></div>
+</div>
+
+<script>
+  (function() {
+    // ---------- звуки ----------
+    let audioCtx = null;
+    function initAudio() {
+      if (audioCtx) return;
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.log("Аудио не поддерживается");
+      }
+    }
+
+    function playTone(type = 'sine', freq = 600, dur = 0.12, vol = 0.16) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + dur);
+    }
+
+    function soundCorrect() {
+      playTone('sine', 750, 0.09, 0.18);
+      setTimeout(() => playTone('sine', 980, 0.12, 0.17), 70);
+    }
+
+    function soundWrong() {
+      playTone('square', 170, 0.17, 0.15);
+      setTimeout(() => playTone('square', 130, 0.18, 0.13), 80);
+    }
+
+    // ---------- данные ----------
+    const tasks = [
+      { id: 0, textBefore: 'Производственные технологии — способы превращать сырьё в изделия. На заводе из листов металла штампуют кузов автомобиля — это технологии ', textAfter: '.', correct: 'машиностроения', options: ['машиностроения', 'пищевой промышленности', 'текстильные'] },
+      { id: 1, textBefore: 'Из молока делают йогурт: очищают, пастеризуют, добавляют закваску. Это технологии ', textAfter: '.', correct: 'пищевой промышленности', options: ['пищевой промышленности', 'животноводства', 'энергосбережения'] },
+      { id: 2, textBefore: 'Хлопковое волокно прядут в нить, ткут полотно, красят и шьют футболки. Это ', textAfter: ' технологии.', correct: 'текстильные', options: ['текстильные', 'строительные', 'растениеводства'] },
+      { id: 3, textBefore: 'Чтобы построить дом, роют котлован, заливают фундамент, возводят стены. Это ', textAfter: ' технологии.', correct: 'строительные', options: ['строительные', 'транспортные', 'бытовые'] },
+      { id: 4, textBefore: 'Когда ты пишешь текст в редакторе, компьютер сохраняет его в памяти. Это пример ', textAfter: ' технологий.', correct: 'компьютерных', options: ['компьютерных', 'сетевых', 'мобильных'] },
+      { id: 5, textBefore: 'Сообщение в чате летит через интернет по кабелям и вышкам связи — это ', textAfter: ' технологии.', correct: 'сетевые', options: ['сетевые', 'телевизионные', 'образовательные'] },
+      { id: 6, textBefore: 'На гидроэлектростанции поток воды крутит турбину и генератор — так работают технологии ', textAfter: '.', correct: 'выработки электроэнергии', options: ['выработки электроэнергии', 'передачи энергии', 'энергосбережения'] },
+      { id: 7, textBefore: 'В теплицах автоматически поливают растения и поддерживают влажность — это технологии ', textAfter: '.', correct: 'растениеводства', options: ['растениеводства', 'животноводства', 'очистки воды'] },
+      { id: 8, textBefore: 'Стиральная машина сама набирает воду, греет, стирает и отжимает — это ', textAfter: ' технологии.', correct: 'бытовые', options: ['бытовые', 'медицинские', 'авиационные'] },
+      { id: 9, textBefore: 'Робот-пылесос объезжает препятствия с помощью датчиков — пример ', textAfter: '.', correct: 'робототехники', options: ['робототехники', 'умного дома', 'протезирования'] }
+    ];
+
+    // Состояние
+    let answers = new Array(tasks.length).fill(null);
+    let selectedGapIndex = null; // какой пропуск сейчас активен
+
+    // DOM
+    const wordBankDiv = document.getElementById('wordBankContainer');
+    const textContainer = document.getElementById('textContainer');
+    const scoreSpan = document.getElementById('scoreDisplay');
+    const progressFill = document.getElementById('progressFill');
+    const finalMsg = document.getElementById('finalMessage');
+    const resetBtn = document.getElementById('resetButton');
+
+    function countCorrect() {
+      return tasks.reduce((acc, task, i) => acc + (answers[i] === task.correct ? 1 : 0), 0);
+    }
+
+    function updateUI() {
+      const correct = countCorrect();
+      scoreSpan.textContent = correct;
+      progressFill.style.width = (correct / tasks.length) * 100 + '%';
+      if (correct === tasks.length && answers.every(a => a !== null)) {
+        finalMsg.textContent = '📜 Великолепно! Все слова на своих местах!';
+      } else {
+        finalMsg.textContent = '';
+      }
+    }
+
+    // Анимация пропуска
+    function animateGapElement(gapElement, isCorrect) {
+      if (!gapElement) return;
+      const cls = isCorrect ? 'correct-flash' : 'wrong-flash';
+      gapElement.classList.add(cls);
+      if (isCorrect) soundCorrect();
+      else soundWrong();
+      setTimeout(() => gapElement.classList.remove(cls), 700);
+    }
+
+    // Рендер банка слов (все варианты над текстом)
+    function renderWordBank() {
+      wordBankDiv.innerHTML = '';
+      // собираем все уникальные варианты из всех заданий
+      const allOptionsSet = new Set();
+      tasks.forEach(t => t.options.forEach(opt => allOptionsSet.add(opt)));
+      
+      allOptionsSet.forEach(optText => {
+        const chip = document.createElement('span');
+        chip.className = 'word-chip';
+        chip.textContent = optText;
+        // Проверяем, использован ли этот вариант как правильный ответ где-либо
+        const usedAsCorrect = tasks.some((task, idx) => answers[idx] === optText && task.correct === optText);
+        if (usedAsCorrect) {
+          chip.classList.add('used-correct');
+        }
+        chip.addEventListener('click', (e) => {
+          e.stopPropagation();
+          initAudio();
+          if (selectedGapIndex === null) {
+            // Если не выбран пропуск, ничего не делаем (или можно подсветить)
+            return;
+          }
+          const idx = selectedGapIndex;
+          // Записываем ответ
+          answers[idx] = optText;
+          // Перерисовываем текст и банк
+          renderText();
+          renderWordBank();
+          // Найти соответствующий пропуск и анимировать
+          const gaps = document.querySelectorAll('.gap');
+          let targetGap = null;
+          gaps.forEach(g => {
+            if (g.dataset.index == idx) targetGap = g;
+          });
+          const isCorrect = (optText === tasks[idx].correct);
+          if (targetGap) animateGapElement(targetGap, isCorrect);
+          updateUI();
+          // Сбросить активный пропуск после выбора
+          selectedGapIndex = null;
+        });
+        wordBankDiv.appendChild(chip);
+      });
+    }
+
+    // Рендер текста с пропусками
+    function renderText() {
+      textContainer.innerHTML = '';
+      tasks.forEach((task, idx) => {
+        const spanBefore = document.createElement('span');
+        spanBefore.textContent = task.textBefore;
+        textContainer.appendChild(spanBefore);
+
+        const gapSpan = document.createElement('span');
+        gapSpan.className = 'gap';
+        if (answers[idx] !== null) {
+          gapSpan.classList.add('filled');
+          gapSpan.textContent = answers[idx];
+        } else {
+          gapSpan.textContent = '_______';
+        }
+        gapSpan.dataset.index = idx;
+        gapSpan.addEventListener('click', (e) => {
+          e.stopPropagation();
+          initAudio();
+          // Установить активный пропуск
+          selectedGapIndex = idx;
+          // Визуально можно подсветить? просто запоминаем.
+        });
+        textContainer.appendChild(gapSpan);
+
+        const spanAfter = document.createElement('span');
+        spanAfter.textContent = task.textAfter;
+        textContainer.appendChild(spanAfter);
+        textContainer.appendChild(document.createElement('br'));
+      });
+    }
+
+    // Сброс игры
+    function resetGame() {
+      initAudio();
+      answers = new Array(tasks.length).fill(null);
+      selectedGapIndex = null;
+      renderText();
+      renderWordBank();
+      updateUI();
+      finalMsg.textContent = '';
+    }
+
+    // Клик вне пропусков сбрасывает активный выбор
+    document.addEventListener('click', function(e) {
+      if (!e.target.classList.contains('gap') && !e.target.classList.contains('word-chip')) {
+        if (selectedGapIndex !== null) {
+          selectedGapIndex = null;
+        }
+      }
+    });
+
+    resetBtn.addEventListener('click', resetGame);
+
+    // Инициализация
+    renderText();
+    renderWordBank();
+    updateUI();
+  })();
+</script>
+</body>
+</html>
